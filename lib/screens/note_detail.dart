@@ -219,20 +219,27 @@ class NoteDetailState extends State<NoteDetail> {
     note.date = DateFormat.yMMMd().format(DateTime.now());
     int result;
 
-    if (note.id != null) {
-      result = await dbHelper.updateNote(note);
+    if (note.title != null) {
+      if (note.id != null) {
+        result = await dbHelper.updateNote(note);
+      }
+      else {
+        result = await dbHelper.insertNote(note);
+      }
+
+      if (result != 0) { //success
+        _showAlertDialog('Status', 'Note Saved Successfully');
+      }
+      else {
+
+      }
     }
 
-    else {
-      result = await dbHelper.insertNote(note);
+    else{
+      _showAlertDialog('Status', 'The Note must have a title');
     }
 
-    if (result != 0) { //success
-      _showAlertDialog('Status', 'Note Saved Successfully');
-    }
-    else {
-      _showAlertDialog('Status', 'Problems Saving Note');
-    }
+
   }
 
   void _delete() async {
